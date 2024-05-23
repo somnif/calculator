@@ -2,7 +2,7 @@ const add = () =>      parseFloat(firstDigit) + parseFloat(secondDigit);
 const subtract = () => parseFloat(firstDigit) - parseFloat(secondDigit);
 const multiply = () => parseFloat(firstDigit) * parseFloat(secondDigit);
 const divide = () => {
-    if (firstDigit === "0" || secondDigit === "0") {
+    if (secondDigit === "0") {
         jokeDraw()
     } else {
         return parseFloat(firstDigit) / parseFloat(secondDigit)
@@ -46,11 +46,45 @@ const parseDigit = (digit) => {
         !operatorSelected ? addToFirst(digit) : addToSecond(digit);
     } else if (digit === "A/C") {
         resetCalc()
+    } else if (digit === "+/-") {
+        operate();
+        secondDigit = "-1";
+        operatorSelected = "multiply";
+        operate();
+    } else if (digit === "BACK") {
+        deleteDigit();
+    } else if (digit === ".") {
+        handleDecimal()
     } else {
         console.log("Not a digit")
     }
     draw();
 }
+
+const deleteDigit = () => {
+    if (!operatorSelected && !mathDoneToggle) {
+        firstDigit = firstDigit.substring(0, firstDigit.length - 1)
+    } else {
+        secondDigit = secondDigit.substring(0,secondDigit.length - 1)
+    }
+    draw();
+}
+
+
+const handleDecimal = () => {
+    if (!operatorSelected || mathDoneToggle) {
+        if (firstDigit === "0" || mathDoneToggle) {
+            addToFirst("0.")
+        } else if (!firstDigit.includes(".")){
+            addToFirst(".")
+        }
+    } else {
+        if (secondDigit === "0" || secondDigit === "") {
+            addToSecond("0.")
+        } else if (!secondDigit.includes(".")){
+            addToSecond(".")
+        }
+}}
 
 const resetCalc = () => {
     firstDigit = "0";
@@ -127,3 +161,17 @@ equalsButton.addEventListener("click", () => operate())
 
 const calcScreen = document.querySelector("#screen > .bottom-row")
 const calcScreenTop = document.querySelector("#screen > .top-row")
+
+const allButtons = document.querySelectorAll(".calc-buttons > div > div")
+allButtons.forEach((button) => button.addEventListener("click", () => {
+    button.classList.add("button-press")
+    setTimeout(() => {
+        button.classList.remove("button-press")
+    }, 300)
+
+}))
+
+document.addEventListener("keypress", (e))
+//features to add:
+// keyboard support
+// backspace support

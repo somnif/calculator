@@ -68,6 +68,10 @@
     text-decoration: none;
     user-select: none;
 }
+.button-press {
+    transform: translate(5px, 5px);
+    box-shadow: none !important;
+}
 
 .calc-digits div {    
     background-color: green;
