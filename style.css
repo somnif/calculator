@@ -16,13 +16,20 @@
     box-shadow: inset 2px 4px darkgreen;
     border-radius: 5px;
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    font-size: 40px;
+    align-items: flex-end;
+    justify-content: center;
+    font-size: 36px;
     font-weight: 800;
+    flex-direction: column;
     font-family: "Reddit Mono";
     box-sizing: border-box;
     padding: 10px 20px;
+}
+
+#screen .top-row {
+    font-size: 20px;
+    font-weight: 400;
+    margin: 0;
 }
 
 .calc-buttons {
