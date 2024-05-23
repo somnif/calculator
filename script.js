@@ -1,16 +1,21 @@
 const add = () =>      parseFloat(firstDigit) + parseFloat(secondDigit);
-const multiply = () => parseFloat(firstDigit) * parseFloat(secondDigit)
-//need to add divide by zero math
-const divide = () =>   parseFloat(firstDigit) / parseFloat(secondDigit)
-const subtract = () =>    parseFloat(firstDigit) - parseFloat(secondDigit)
+const subtract = () => parseFloat(firstDigit) - parseFloat(secondDigit);
+const multiply = () => parseFloat(firstDigit) * parseFloat(secondDigit);
+const divide = () => {
+    if (firstDigit === "0" || secondDigit === "0") {
+        jokeDraw()
+    } else {
+        return parseFloat(firstDigit) / parseFloat(secondDigit)
+    }
+}
 
 let firstDigit = "0";
 let secondDigit = "";
 let operatorSelected = "";
+let mathDoneToggle = false;
 
 const operate = () => {
     if (firstDigit && secondDigit && operatorSelected) {
-        console.log (add().toString(), operatorSelected)
         switch (operatorSelected) {
             case "add": firstDigit = add().toString(); break;
             case "multiply": firstDigit = multiply().toString(); break;
@@ -19,23 +24,38 @@ const operate = () => {
         }
         secondDigit = ""
         operatorSelected = ""
+        mathDoneToggle = true;
+        if (firstDigit.length > 16) {
+            roundDigit()
+        }
         draw()
     }
 }
 
+const roundDigit = () => {
+    let digitArray = firstDigit.split("")
+    if (digitArray.includes("e")) {
+        firstDigit = digitArray.slice(0,12).join("") + "e" + firstDigit.split("e")[1]
+    } else {
+        firstDigit = digitArray.slice(0,15).join("")
+    }
+}
 
 const parseDigit = (digit) => {
     if (/[0-9]/.test(digit)) {
         !operatorSelected ? addToFirst(digit) : addToSecond(digit);
     } else if (digit === "A/C") {
-        firstDigit = "0";
-        secondDigit = "";
-        operatorSelected = "";
+        resetCalc()
     } else {
         console.log("Not a digit")
     }
-    console.log(firstDigit, secondDigit, operatorSelected)    
     draw();
+}
+
+const resetCalc = () => {
+    firstDigit = "0";
+    secondDigit = "";
+    operatorSelected = "";
 }
 
 const parseOperator = (operator) => {
@@ -51,8 +71,11 @@ const parseOperator = (operator) => {
 const addToFirst = (digit) => {
     if (firstDigit === "0") {
         firstDigit = digit;
+    } else if (mathDoneToggle){
+        firstDigit = digit;
+        mathDoneToggle = false;
     } else {
-        firstDigit = firstDigit.concat(digit)
+        firstDigit = firstDigit.concat(digit).slice(0,13)
     }
 }
 
@@ -60,7 +83,7 @@ const addToSecond = (digit) => {
     if (secondDigit === 0 || secondDigit === "") {
         secondDigit = digit;
     } else {
-        secondDigit = secondDigit.concat(digit)
+        secondDigit = secondDigit.concat(digit).slice(0,13)
     }
 }
 
@@ -78,6 +101,11 @@ const draw = () => {
     calcScreenTop.innerText = firstDigit + " " + operatorSymbol() + " " + secondDigit
 }
 
+const jokeDraw = () => {
+    resetCalc();
+    calcScreenTop.innerText = "You divided by ZERO!"
+    calcScreen.innerText = "Earth Explodes!"
+}
 
 
 const calcDigits = document.querySelectorAll(".calc-digits > div")
